@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/EventManagement.Application/EventManagement.Application.csproj" />
+    <Project Path="src/EventManagement.Domain/EventManagement.Domain.csproj" />
+    <Project Path="src/EventManagement.Infrastructure/EventManagement.Infrastructure.csproj" />
+    <Project Path="src/EventManagement.Web/EventManagement.Web.csproj" />
+  </Folder>
+</Solution>

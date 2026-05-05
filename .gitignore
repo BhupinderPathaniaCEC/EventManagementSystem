@@ -1,0 +1,125 @@
+# =========================
+
+# Build & Output
+
+# =========================
+
+bin/
+obj/
+out/
+publish/
+
+# =========================
+
+# User-specific files
+
+# =========================
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =========================
+
+# VS Code / Visual Studio
+
+# =========================
+
+.vscode/
+.vs/
+
+# =========================
+
+# Logs
+
+# =========================
+
+*.log
+logs/
+
+# =========================
+
+# OS generated files
+
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# Environment files (IMPORTANT)
+
+# =========================
+
+.env
+appsettings.Development.json
+
+# =========================
+
+# EF Core & Database
+
+# =========================
+
+*.db
+*.sqlite
+*.sqlite3
+
+# If you use migrations snapshot backups (optional)
+
+*.Designer.cs
+
+# =========================
+
+# Node (only if you later add frontend tools)
+
+# =========================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+
+# Rider / JetBrains (optional)
+
+# =========================
+
+.idea/
+
+# =========================
+
+# Temporary files
+
+# =========================
+
+*.tmp
+*.temp
+
+# =========================
+
+# Publish profiles (sensitive)
+
+# =========================
+
+Properties/PublishProfiles/*.pubxml
+Properties/PublishProfiles/*.pubxml.user
+
+# =========================
+
+# Secrets
+
+# =========================
+
+secrets.json
+
+# =========================
+
+# Coverage reports
+
+# =========================
+
+coverage/
+*.coverage
