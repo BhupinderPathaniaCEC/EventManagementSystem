@@ -1,0 +1,148 @@
+@model EventManagement.Application.DTOs.EventDto
+
+@{
+    ViewData["Title"] = "ASP.NET MACHINE TEST";
+}
+
+<h3 class="mb-4 text-center">ASP.NET MACHINE TEST</h3>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-bold">Event Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label fw-bold">Event Description</label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="StartDate" class="form-label fw-bold">Start Date</label>
+            <input asp-for="StartDate" type="date" class="form-control" />
+            <span asp-validation-for="StartDate" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="EndDate" class="form-label fw-bold">End Date</label>
+            <input asp-for="EndDate" type="date" class="form-control" />
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Organizer" class="form-label fw-bold">Organizer</label>
+        <input asp-for="Organizer" class="form-control" />
+        <span asp-validation-for="Organizer" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label fw-bold">Tickets</label>
+        <button type="button" id="addTicketBtn" class="btn btn-secondary btn-sm ms-2">Add new ticket</button>
+    </div>
+
+    <table class="table table-bordered" id="ticketsTable">
+        <thead class="table-light">
+            <tr>
+                <th style="width:10%">ID</th>
+                <th style="width:35%">Ticket No</th>
+                <th style="width:25%">Price</th>
+                <th style="width:30%">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="ticketsBody">
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-secondary">Save Event</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        let rowIdx = 0;
+
+        function addRow(ticketNo = '', price = '', isNew = true) {
+            rowIdx++;
+            const isEdit = ticketNo !== '' || price !== '';
+            const saveBtn = isNew && !isEdit 
+                ? `<button type="button" class="btn btn-sm btn-outline-secondary save-btn">Save</button>` 
+                : `<button type="button" class="btn btn-sm btn-outline-secondary edit-btn">Edit</button>`;
+            
+            const row = `
+                <tr data-idx="${rowIdx}">
+                    <td class="row-id">${rowIdx}</td>
+                    <td><input type="text" name="Tickets[${rowIdx - 1}].TicketNo" value="${ticketNo}" class="form-control form-control-sm ticket-no" required /></td>
+                    <td><input type="number" name="Tickets[${rowIdx - 1}].Price" value="${price}" class="form-control form-control-sm ticket-price" step="0.01" min="0" required /></td>
+                    <td>
+                        ${saveBtn}
+                        <button type="button" class="btn btn-sm btn-outline-danger delete-btn">Delete</button>
+                    </td>
+                </tr>`;
+            $('#ticketsBody').append(row);
+            reindex();
+        }
+
+        function reindex() {
+            $('#ticketsBody tr').each(function (i) {
+                $(this).find('.ticket-no').attr('name', `Tickets[${i}].TicketNo`);
+                $(this).find('.ticket-price').attr('name', `Tickets[${i}].Price`);
+                $(this).find('.row-id').text(i + 1);
+            });
+        }
+
+        $('#addTicketBtn').click(function () {
+            addRow('', '', true);
+        });
+
+        $('#ticketsBody').on('click', '.delete-btn', function () {
+            $(this).closest('tr').remove();
+            reindex();
+        });
+
+        $('#ticketsBody').on('click', '.save-btn', function () {
+            const row = $(this).closest('tr');
+            const noInput = row.find('.ticket-no');
+            const priceInput = row.find('.ticket-price');
+            
+            // Validate
+            if (!noInput.val() || !priceInput.val()) {
+                alert('Please fill in both Ticket No and Price');
+                return;
+            }
+            
+            // Lock fields and change button to Edit
+            noInput.prop('readonly', true);
+            priceInput.prop('readonly', true);
+            $(this).text('Edit').removeClass('save-btn').addClass('edit-btn');
+        });
+
+        $('#ticketsBody').on('click', '.edit-btn', function () {
+            const row = $(this).closest('tr');
+            const noInput = row.find('.ticket-no');
+            const priceInput = row.find('.ticket-price');
+
+            if ($(this).text().trim() === 'Edit') {
+                noInput.prop('readonly', false).focus();
+                priceInput.prop('readonly', false);
+                $(this).text('Save').removeClass('edit-btn').addClass('save-btn');
+            } else {
+                // Saving
+                if (!noInput.val() || !priceInput.val()) {
+                    alert('Please fill in both Ticket No and Price');
+                    return;
+                }
+                noInput.prop('readonly', true);
+                priceInput.prop('readonly', true);
+                $(this).text('Edit').removeClass('save-btn').addClass('edit-btn');
+            }
+        });
+    </script>
+}
